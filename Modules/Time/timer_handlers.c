@@ -143,19 +143,5 @@ void Timer1_IRQHandler() {
  * Read values from sensors
  */
 void Timer2_IRQHandler() {
-#ifdef MPU6050_ENABLED
-    MPU6050_getScaledData(&params.param[PARAM_AX],
-                          &params.param[PARAM_AY],
-                          &params.param[PARAM_AZ],
-                          &params.param[PARAM_GX],
-                          &params.param[PARAM_GY],
-                          &params.param[PARAM_GZ],
-                          &params.param[PARAM_T]);
-#endif // MPU6050_ENABLED
-#ifdef HMC_ENABLED
-    HMC_get_scaled_Data(&params.param[PARAM_MX],
-                        &params.param[PARAM_MY],
-                        &params.param[PARAM_MZ]);
-#endif // HMC_ENABLED
     MSS_TIM2_clear_irq();
 }

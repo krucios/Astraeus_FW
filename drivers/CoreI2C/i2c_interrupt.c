@@ -17,6 +17,7 @@
  */
 void I2C_enable_irq( i2c_instance_t * this_i2c )
 {
+    NVIC_EnableIRQ(SysTick_IRQn);
     NVIC_EnableIRQ(FabricIrq0_IRQn);
 }
 
@@ -27,4 +28,5 @@ void I2C_enable_irq( i2c_instance_t * this_i2c )
 void I2C_disable_irq( i2c_instance_t * this_i2c )
 {
     NVIC_DisableIRQ(FabricIrq0_IRQn);
+    NVIC_DisableIRQ(SysTick_IRQn);
 }
