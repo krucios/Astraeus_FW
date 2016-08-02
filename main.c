@@ -15,6 +15,7 @@
 #include <Modules/MAVLink/handlers.h>
 #include <Modules/MAVLink/system.h>
 #include <Modules/Parameters_Holder/param_holder.h>
+#include <Modules/PID/pid.h>
 
 #include <Helpers/sys_helper/sys_helper.h>
 
@@ -24,6 +25,9 @@
 
 #include <defines.h>
 
+// TODO remove it
+extern uint16_t force;
+
 void setup(void);
 
 int main(void) {
@@ -31,6 +35,7 @@ int main(void) {
     setup();
 
     uint8_t rx_c;
+    uint16_t pow[4];
 
     mavlink_message_t msg;
     mavlink_status_t status;
@@ -51,6 +56,14 @@ int main(void) {
                             &params.param[PARAM_MY],
                             &params.param[PARAM_MZ]);
 #endif // HMC_ENABLED
+
+        pid_update(q0, q1, q2, q3,
+                params.param[PARAM_GX],
+                params.param[PARAM_GY],
+                params.param[PARAM_GZ], force, pow);
+
+        motors_set(pow);
+
         if (BT_get_rx(&rx_c, 1)) {
             if (mavlink_parse_char(MAVLINK_COMM_0, rx_c, &msg, &status)) {
                 handle_mavlink_message(&msg);

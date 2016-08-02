@@ -14,10 +14,14 @@
 #include <Modules/UART/uart.h>
 #include <Modules/Motors/motors.h>
 #include <Modules/Parameters_Holder/param_holder.h>
+#include <Modules/PID/pid.h>
 
 #include <stdio.h>
 
 extern param_holder_t params;
+
+// TODO remove it
+uint16_t force = 0;
 
 void handle_mavlink_message(mavlink_message_t* msg) {
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
@@ -37,6 +41,35 @@ void handle_mavlink_message(mavlink_message_t* msg) {
                     motors_masked_set(m_pow, mask);
                     delay((uint64_t)cmd.param4 * 1000000);
                     motors_masked_set(m_pow, 0); // 0 mask - disable all motors
+                }
+                break;
+            case MAV_CMD_USER_1: {
+                    uint8_t mask = 0;
+                    if (cmd.param1 > 0) {
+                        mask |= 1;
+                    }
+                    if (cmd.param2 > 0) {
+                        mask |= 2;
+                    }
+                    if (cmd.param3 > 0) {
+                        mask |= 4;
+                    }
+                    if (cmd.param4 > 0) {
+                        mask |= 8;
+                    }
+                    motors_set_mask(mask);
+                }
+                break;
+            case MAV_CMD_USER_2: {
+                    force = cmd.param1;
+                }
+                break;
+            case MAV_CMD_USER_3: {
+                    Kp_u = cmd.param1;
+                }
+                break;
+            case MAV_CMD_USER_4: {
+                    Kd_u = cmd.param1;
                 }
                 break;
             default: {

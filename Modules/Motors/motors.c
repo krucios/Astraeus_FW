@@ -32,13 +32,13 @@ void motors_set(int16_t m_power[4]) {
     else
         PWM_set_duty_cycle(&g_pwm, PWM_2, 0);
     if (m_mask & (1 << 2))
-        PWM_set_duty_cycle(&g_pwm, PWM_4, m_power[2]);
-    else
-        PWM_set_duty_cycle(&g_pwm, PWM_4, 0);
-    if (m_mask & (1 << 3))
-        PWM_set_duty_cycle(&g_pwm, PWM_3, m_power[3]);
+        PWM_set_duty_cycle(&g_pwm, PWM_3, m_power[2]);
     else
         PWM_set_duty_cycle(&g_pwm, PWM_3, 0);
+    if (m_mask & (1 << 3))
+        PWM_set_duty_cycle(&g_pwm, PWM_4, m_power[3]);
+    else
+        PWM_set_duty_cycle(&g_pwm, PWM_4, 0);
 }
 
 void motors_masked_set(int16_t m_power[4], uint8_t mask) {
@@ -51,13 +51,13 @@ void motors_masked_set(int16_t m_power[4], uint8_t mask) {
     else
         PWM_set_duty_cycle(&g_pwm, PWM_2, 0);
     if (mask & (1 << 2))
-        PWM_set_duty_cycle(&g_pwm, PWM_4, m_power[2]);
-    else
-        PWM_set_duty_cycle(&g_pwm, PWM_4, 0);
-    if (mask & (1 << 3))
-        PWM_set_duty_cycle(&g_pwm, PWM_3, m_power[3]);
+        PWM_set_duty_cycle(&g_pwm, PWM_3, m_power[2]);
     else
         PWM_set_duty_cycle(&g_pwm, PWM_3, 0);
+    if (mask & (1 << 3))
+        PWM_set_duty_cycle(&g_pwm, PWM_4, m_power[3]);
+    else
+        PWM_set_duty_cycle(&g_pwm, PWM_4, 0);
 }
 
 void motors_set_mask(uint8_t mask) {
