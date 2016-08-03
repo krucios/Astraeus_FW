@@ -17,13 +17,12 @@
 
 #define force_high_trottle 850
 #define power_high_trottle 1000
-#define loop_time 4 // freq of computing data in millisecond
 
 #define Kp_d 1
-#define Kd_d 1
-#define Ki_d 1048576
+#define Kd_d 256
+#define Ki_d 1048576 // 2^^20
 
-extern volatile int16_t Kp_u, Kd_u;
+extern volatile int16_t Kp_u, Kd_u, Ki_u;
 
 /*
 void pid_update(float q0, float q1, float q2, float q3, float gx,

@@ -6,6 +6,7 @@ static uint8_t cur_gyro_range;
 static uint8_t cur_accel_range;
 
 static int16_t c_ax, c_ay, c_az, c_gx, c_gy, c_gz, c_t;
+int16_t _ax, _ay, _az, _gx, _gy, _gz, _t;
 
 void MPU6050_init() {
     MPU6050_setClockSource(MPU6050_CLOCK_PLL_XGYRO);
@@ -157,7 +158,7 @@ void MPU6050_setDLPFMode(uint8_t mode) {
 
 void MPU6050_calibration() {
     uint16_t i;
-
+/*
     int16_t _ax;
     int16_t _ay;
     int16_t _az;
@@ -165,7 +166,7 @@ void MPU6050_calibration() {
     int16_t _gy;
     int16_t _gz;
     int16_t _t;
-
+*/
     MPU6050_getRawData(&c_ax, &c_ay, &c_az, &c_gx, &c_gy, &c_gz, &c_t);
     for (i = 0; i < MPU_CALIBRATION_SAMPLES_COUNT; i++) {
         MPU6050_getRawData(&_ax, &_ay, &_az, &_gx, &_gy, &_gz, &_t);
@@ -230,6 +231,7 @@ void MPU6050_getData(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx,
 
 void MPU6050_getScaledData(float* ax, float* ay, float* az, float* gx,
         float* gy, float* gz, float* t) {
+    /*
     int16_t _ax;
     int16_t _ay;
     int16_t _az;
@@ -237,6 +239,7 @@ void MPU6050_getScaledData(float* ax, float* ay, float* az, float* gx,
     int16_t _gy;
     int16_t _gz;
     int16_t _t;
+    */
 
     float accel_max;
     float gyro_max;

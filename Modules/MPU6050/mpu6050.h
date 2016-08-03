@@ -382,6 +382,8 @@
 
 #define USE_CALIBRATED_MASK (CALIBRATED_GYROX | CALIBRATED_GYROY | CALIBRATED_GYROZ)
 
+extern int16_t _ax, _ay, _az, _gx, _gy, _gz, _t;
+
 void MPU6050_init();
 void MPU6050_calibration();
 

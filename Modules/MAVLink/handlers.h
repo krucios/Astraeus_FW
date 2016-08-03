@@ -66,10 +66,8 @@ void handle_mavlink_message(mavlink_message_t* msg) {
                 break;
             case MAV_CMD_USER_3: {
                     Kp_u = cmd.param1;
-                }
-                break;
-            case MAV_CMD_USER_4: {
-                    Kd_u = cmd.param1;
+                    Kd_u = cmd.param2;
+                    Ki_u = cmd.param3;
                 }
                 break;
             default: {

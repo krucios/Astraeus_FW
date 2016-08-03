@@ -6,15 +6,17 @@
  */
 
 #include "pid.h"
+#include <Modules/MPU6050/mpu6050.h>
 
-volatile int16_t Kp_u = 11, Kd_u = 11;
+volatile int16_t Kp_u = 11, Kd_u = 11, Ki_u = 64;
 // static int32_t Ki_u = 12;
 // static int16_t P_lim = 200, I_lim = 50, D_lim = 200;
 // static int16_t amplif = 6;
 // static int32_t I_lim2;
 // static int16_t Itmp_p = 87381, Itmp_r = -1310720, Itmp_y; // this val's get from telemetry after flying
-static int16_t Dtmp_p, Dtmp_r, Dtmp_y;
-static int16_t Ptmp_p, Ptmp_r, Ptmp_y;
+static int16_t Dtmp_r, Dtmp_p, Dtmp_y;
+static int16_t Ptmp_r, Ptmp_p, Ptmp_y;
+static int16_t Itmp_r, Itmp_p, Itmp_y;
 /*
 inline void pid_update(float q0, float q1, float q2, float q3, float gx,
         float gy, float gz, uint16_t force, int16_t* pow) {
@@ -31,12 +33,16 @@ inline void pid_update(float roll, float pitch, float yaw, float gx,
         force = force_high_trottle;
 
     Ptmp_r = (int16_t) (Kp_u * roll  / Kp_d);
-    Ptmp_p = (int16_t) (Kp_u * (pitch - 0.08) / Kp_d);
+    Ptmp_p = (int16_t) (Kp_u * pitch / Kp_d);
     Ptmp_y = (int16_t) (Kp_u * yaw   / Kp_d);
 
     Dtmp_r = (int16_t) (Kd_u * gx / Kd_d);
     Dtmp_p = (int16_t) (Kd_u * gy / Kd_d);
     Dtmp_y = (int16_t) (Kd_u * gz / Kd_d);
+
+    Itmp_r += (int16_t) (Ki_u * _ay / Ki_d);
+    Itmp_p += (int16_t) (Ki_u * _ax / Ki_d);
+    // Itmp_y += (int16_t) (Ki_u * _az / Ki_d);
 
     /*
     if (q0 > 0) { // если угол поворота >0.5 градуса, нужно стабилизировать по углам.
@@ -58,9 +64,9 @@ inline void pid_update(float roll, float pitch, float yaw, float gx,
     }
     */
 
-    sum_r = Dtmp_r + Ptmp_r;
-    sum_p = Dtmp_p + Ptmp_p;
-    sum_y = Dtmp_y + Ptmp_y;
+    sum_r = Dtmp_r + Ptmp_r + Itmp_r;
+    sum_p = Dtmp_p + Ptmp_p - Itmp_p;
+    sum_y = Dtmp_y + Ptmp_y; // + Itmp_y;
 
     pow[0] = force + sum_r - sum_p - sum_y;
     pow[1] = force + sum_r + sum_p + sum_y;
