@@ -35,6 +35,8 @@ int main(void) {
     setup();
 
     uint8_t rx_c;
+    float roll, pitch, yaw;
+    float q[4];
     uint16_t pow[4];
 
     mavlink_message_t msg;
@@ -43,24 +45,38 @@ int main(void) {
     while (1) {
         delay(1000);
 #ifdef MPU6050_ENABLED
-        MPU6050_getScaledData(&params.param[PARAM_AX],
-                              &params.param[PARAM_AY],
-                              &params.param[PARAM_AZ],
-                              &params.param[PARAM_GX],
-                              &params.param[PARAM_GY],
-                              &params.param[PARAM_GZ],
-                              &params.param[PARAM_T]);
+        MPU6050_getScaledData(
+                &params.param[PARAM_AX],
+                &params.param[PARAM_AY],
+                &params.param[PARAM_AZ],
+                &params.param[PARAM_GX],
+                &params.param[PARAM_GY],
+                &params.param[PARAM_GZ],
+                &params.param[PARAM_T]);
 #endif // MPU6050_ENABLED
 #ifdef HMC_ENABLED
         HMC_get_scaled_Data(&params.param[PARAM_MX],
-                            &params.param[PARAM_MY],
-                            &params.param[PARAM_MZ]);
+                &params.param[PARAM_MY],
+                &params.param[PARAM_MZ]);
 #endif // HMC_ENABLED
 
-        pid_update(q0, q1, q2, q3,
+        // pid_update(q0, q1, q2, q3,
+        q[0] = q0;
+        q[1] = q1;
+        q[2] = q2;
+        q[3] = q3;
+
+        mavlink_quaternion_to_euler(q, &roll, &pitch, &yaw);
+
+        pid_update(
+                roll,
+                pitch,
+                yaw,
                 params.param[PARAM_GX],
                 params.param[PARAM_GY],
-                params.param[PARAM_GZ], force, pow);
+                params.param[PARAM_GZ],
+                force,
+                pow);
 
         motors_set(pow);
 
@@ -118,5 +134,4 @@ void setup() {
 #endif // HMC_ENABLED
     timer_mss2_start();
 }
-
 

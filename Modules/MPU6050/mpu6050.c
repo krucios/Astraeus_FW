@@ -192,14 +192,13 @@ void MPU6050_getRawData(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx,
     i2c_writeBytes(MPU6050_ADDRESS, tx_buf, tx_len);
     i2c_readBytes(MPU6050_ADDRESS, rx_buf, rx_len);
 
-    // Because of wrong assembled sensor
-    *ax = (int16_t) (((rx_buf[0]) << 8) | rx_buf[1]);
-    *ay = (int16_t) (((rx_buf[2]) << 8) | rx_buf[3]);
-    *az = (int16_t) -(((rx_buf[4]) << 8) | rx_buf[5]);
-    *t = (int16_t) (((rx_buf[6]) << 8) | rx_buf[7]);
-    *gx = (int16_t) -(((rx_buf[8]) << 8) | rx_buf[9]);
-    *gy = (int16_t) -(((rx_buf[10]) << 8) | rx_buf[11]);
-    *gz = (int16_t) (((rx_buf[12]) << 8) | rx_buf[13]);
+    *ax = (int16_t)   (((rx_buf[0])  << 8) | rx_buf[1]);
+    *ay = (int16_t)   (((rx_buf[2])  << 8) | rx_buf[3]);
+    *az = (int16_t) - (((rx_buf[4])  << 8) | rx_buf[5]);
+    *t  = (int16_t)   (((rx_buf[6])  << 8) | rx_buf[7]);
+    *gx = (int16_t) - (((rx_buf[8])  << 8) | rx_buf[9]);
+    *gy = (int16_t) - (((rx_buf[10]) << 8) | rx_buf[11]);
+    *gz = (int16_t)   (((rx_buf[12]) << 8) | rx_buf[13]);
 }
 
 void MPU6050_getData(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx,
