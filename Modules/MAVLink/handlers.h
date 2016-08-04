@@ -68,6 +68,10 @@ void handle_mavlink_message(mavlink_message_t* msg) {
                     Ki_u = cmd.param3;
                 }
                 break;
+            case MAV_CMD_USER_4: {
+                    MPU6050_calibration();
+                }
+                break;
             default: {
                     mavlink_message_t msg;
                     uint8_t buff[50];

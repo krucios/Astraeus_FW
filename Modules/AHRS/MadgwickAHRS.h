@@ -17,7 +17,7 @@
 // Variable declaration
 
 extern volatile float beta; // algorithm gain
-extern volatile float q[4]; // quaternion of sensor frame relative to auxiliary frame
+extern float q[4]; // quaternion of sensor frame relative to auxiliary frame
 
 //---------------------------------------------------------------------------------------------------
 // Function declarations

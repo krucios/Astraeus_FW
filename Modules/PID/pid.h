@@ -17,8 +17,8 @@
 #define PID_POWER_MAX 1000
 
 #define Kp_d 1
-#define Kd_d 1024
-#define Ki_d 1048576 // 2^^20
+#define Kd_d 16
+#define Ki_d 16
 
 extern volatile int16_t Kp_u, Kd_u, Ki_u;
 extern volatile uint16_t force;
