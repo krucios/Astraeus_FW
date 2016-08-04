@@ -20,9 +20,6 @@
 
 extern param_holder_t params;
 
-// TODO remove it
-uint16_t force = 0;
-
 void handle_mavlink_message(mavlink_message_t* msg) {
     uint8_t buf[MAVLINK_MAX_PACKET_LEN];
     uint32_t len;
@@ -36,11 +33,12 @@ void handle_mavlink_message(mavlink_message_t* msg) {
             switch (cmd.command) {
             case MAV_CMD_DO_MOTOR_TEST: {
                     uint8_t throttle = (uint8_t)cmd.param3 * 10;
-                    uint16_t m_pow[4] = {throttle, throttle, throttle, throttle};
+                    motors_pow[0] = motors_pow[1] =
+                    motors_pow[2] = motors_pow[3] = throttle;
                     uint8_t mask = 1 << (uint8_t)(cmd.param1 - 1);
-                    motors_masked_set(m_pow, mask);
+                    motors_masked_set(mask);
                     delay((uint64_t)cmd.param4 * 1000000);
-                    motors_masked_set(m_pow, 0); // 0 mask - disable all motors
+                    motors_masked_set(0); // 0 mask - disable all motors
                 }
                 break;
             case MAV_CMD_USER_1: {

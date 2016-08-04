@@ -14,11 +14,14 @@
 #define PWM_PRESCALE 1
 #define PWM_PERIOD 1000
 
+#define MOTORS_COUNT 4
+
 extern pwm_instance_t  g_pwm;
+extern uint16_t motors_pow[MOTORS_COUNT];
 
 void motors_init();
-void motors_set(int16_t m_power[4]);
-void motors_masked_set(int16_t m_power[4], uint8_t mask);
+void motors_set();
+void motors_masked_set(uint8_t mask);
 void motors_set_mask(uint8_t mask);
 
 #endif /* MODULES_MOTORS_MOTORS_H_ */

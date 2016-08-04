@@ -25,9 +25,6 @@
 
 #include <defines.h>
 
-// TODO remove it
-extern uint16_t force;
-
 void setup(void);
 
 int main(void) {
@@ -37,7 +34,6 @@ int main(void) {
     uint8_t rx_c;
     float roll, pitch, yaw;
     float q[4];
-    uint16_t pow[4];
 
     mavlink_message_t msg;
     mavlink_status_t status;
@@ -61,24 +57,8 @@ int main(void) {
 #endif // HMC_ENABLED
 
         // pid_update(q0, q1, q2, q3,
-        q[0] = q0;
-        q[1] = q1;
-        q[2] = q2;
-        q[3] = q3;
-
-        mavlink_quaternion_to_euler(q, &roll, &pitch, &yaw);
-
-        pid_update(
-                roll,
-                pitch,
-                yaw,
-                params.param[PARAM_GX],
-                params.param[PARAM_GY],
-                params.param[PARAM_GZ],
-                force,
-                pow);
-
-        motors_set(pow);
+        pid_update(motors_pow);
+        motors_set();
 
         if (BT_get_rx(&rx_c, 1)) {
             if (mavlink_parse_char(MAVLINK_COMM_0, rx_c, &msg, &status)) {
@@ -91,6 +71,7 @@ int main(void) {
 }
 
 void setup() {
+    uint8_t retcode = 0;
     timers_init();
     uart_init();
     i2c_init();
@@ -100,16 +81,18 @@ void setup() {
 #ifdef MPU6050_ENABLED
     MPU6050_init();
 #ifdef MPU6050_SELFTEST
-    if (!MPU6050_selfTest()) {
+    if (!(retcode = MPU6050_selfTest())) {
         mavlink_message_t msg;
+        uint8_t text[50];
 
-        // TODO retcode into msg
+        sprintf(text, "MPU6050 SELFTEST FAILED: %d", retcode);
+
         mavlink_msg_statustext_pack(
                 mavlink_system.sysid,
                 mavlink_system.compid,
                 &msg,
                 MAV_SEVERITY_CRITICAL,
-                "MPU6050 SELFTEST FAILED");
+                text);
         mavlink_send_msg(&msg);
     }
 #endif // MPU6050_SELFTEST
@@ -118,16 +101,18 @@ void setup() {
 #ifdef HMC_ENABLED
     HMC_init();
 #ifdef HMC_SELFTEST
-    if (!HMC_self_test()) {
+    if (!(retcode = HMC_self_test())) {
         mavlink_message_t msg;
+        uint8_t text[50];
 
-        // TODO retcode into msg
+        sprintf(text, "HMC SELFTEST FAILED: %d", retcode);
+
         mavlink_msg_statustext_pack(
                 mavlink_system.sysid,
                 mavlink_system.compid,
                 &msg,
                 MAV_SEVERITY_CRITICAL,
-                "HMC SELFTEST FAILED");
+                text);
         mavlink_send_msg(&msg);
     }
 #endif // HMC_SELFTEST
