@@ -13,7 +13,7 @@
 #include <Modules/AHRS/MadgwickAHRS.h>
 #include <Modules/MAVLink/common/mavlink.h>
 
-volatile int16_t Kp_u = 512, Kd_u = 16, Ki_u = 256;
+volatile int16_t Kp_u = 16, Kd_u = 3, Ki_u = 0;
 volatile uint16_t force = 0;
 
 static int16_t Dtmp_r, Dtmp_p, Dtmp_y;
