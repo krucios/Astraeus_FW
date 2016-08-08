@@ -51,7 +51,8 @@ int main(void) {
                 &params.param[PARAM_T]);
 #endif // MPU6050_ENABLED
 #ifdef HMC_ENABLED
-        HMC_get_scaled_Data(&params.param[PARAM_MX],
+        HMC_get_scaled_Data(
+                &params.param[PARAM_MX],
                 &params.param[PARAM_MY],
                 &params.param[PARAM_MZ]);
 #endif // HMC_ENABLED
@@ -81,7 +82,7 @@ void setup() {
 #ifdef MPU6050_ENABLED
     MPU6050_init();
 #ifdef MPU6050_SELFTEST
-    if (!(retcode = MPU6050_selfTest())) {
+    if (retcode = MPU6050_selfTest()) {
         mavlink_message_t msg;
         uint8_t text[50];
 
@@ -99,21 +100,31 @@ void setup() {
     MPU6050_calibration();
 #endif // MPU6050_ENABLED
 #ifdef HMC_ENABLED
-    HMC_init();
-#ifdef HMC_SELFTEST
-    if (!(retcode = HMC_self_test())) {
+    {
         mavlink_message_t msg;
         uint8_t text[50];
-
-        sprintf(text, "HMC SELFTEST FAILED: %d", retcode);
 
         mavlink_msg_statustext_pack(
                 mavlink_system.sysid,
                 mavlink_system.compid,
                 &msg,
-                MAV_SEVERITY_CRITICAL,
-                text);
+                MAV_SEVERITY_INFO,
+                "HMC SELFTEST STARTED: SHAKE VEHICLE");
         mavlink_send_msg(&msg);
+
+        HMC_init();
+#ifdef HMC_SELFTEST
+        if (retcode = HMC_self_test()) {
+            sprintf(text, "HMC SELFTEST FAILED: %d", retcode);
+
+            mavlink_msg_statustext_pack(
+                    mavlink_system.sysid,
+                    mavlink_system.compid,
+                    &msg,
+                    MAV_SEVERITY_CRITICAL,
+                    text);
+            mavlink_send_msg(&msg);
+        }
     }
 #endif // HMC_SELFTEST
 #endif // HMC_ENABLED
