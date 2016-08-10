@@ -11,6 +11,7 @@
 #include <Modules/I2C/i2c.h>
 #include <Modules/MPU6050/mpu6050.h>
 #include <Modules/HMC/hmc.h>
+#include <Modules/BMP180/bmp180.h>
 #include <Modules/MAVLink/common/mavlink.h>
 #include <Modules/MAVLink/handlers.h>
 #include <Modules/MAVLink/system.h>
@@ -56,6 +57,11 @@ int main(void) {
                 &params.param[PARAM_MY],
                 &params.param[PARAM_MZ]);
 #endif // HMC_ENABLED
+#ifdef BMP180_ENABLED
+        params.param[PARAM_AP] = BMP_get_preasure();
+        params.param[PARAM_AT] = BMP_get_altitude(params.param[PARAM_AP]);
+
+#endif // BMP180_ENABLED
 
         // pid_update(q0, q1, q2, q3,
         pid_update(motors_pow);
@@ -79,10 +85,30 @@ void setup() {
     motors_init();
     mavlink_sys_update(MAV_MODE_AUTO_ARMED, MAV_STATE_STANDBY);
     timer_mss1_start();
+
+#ifdef BMP180_ENABLED
+    retcode = BMP_init();
+    if (retcode) {
+        mavlink_message_t msg;
+        uint8_t text[50];
+
+        sprintf(text, "BMP180 initialization failure: %d", retcode);
+
+        mavlink_msg_statustext_pack(
+                mavlink_system.sysid,
+                mavlink_system.compid,
+                &msg,
+                MAV_SEVERITY_CRITICAL,
+                text);
+        mavlink_send_msg(&msg);
+    }
+#endif // BMP180_ENABLED
+
 #ifdef MPU6050_ENABLED
     MPU6050_init();
 #ifdef MPU6050_SELFTEST
-    if (retcode = MPU6050_selfTest()) {
+    retcode = MPU6050_selfTest();
+    if (retcode) {
         mavlink_message_t msg;
         uint8_t text[50];
 
@@ -99,6 +125,7 @@ void setup() {
 #endif // MPU6050_SELFTEST
     MPU6050_calibration();
 #endif // MPU6050_ENABLED
+
 #ifdef HMC_ENABLED
     {
         mavlink_message_t msg;

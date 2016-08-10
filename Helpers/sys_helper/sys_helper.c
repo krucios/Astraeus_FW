@@ -6,3 +6,7 @@ void delay(uint64_t us) {
         cur = usec();
     }
 }
+
+void delay_ms(uint32_t ms) {
+    delay(ms * 1000);
+}

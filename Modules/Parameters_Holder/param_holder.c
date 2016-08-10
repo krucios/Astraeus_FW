@@ -8,7 +8,7 @@
 #include "param_holder.h"
 
 param_holder_t params = {
-        .param      = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        .param      = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         .param_name =
             {"ACCEL_X",
              "ACCEL_Y",
@@ -20,7 +20,8 @@ param_holder_t params = {
              "MAGNT_Y",
              "MAGNT_Z",
              "TEMP_CS",
-             "CONTROL"}};
+             "ALTITUD",
+             "ABSPRES"}};
 
 static uint16_t m_parameter_i = 0;
 

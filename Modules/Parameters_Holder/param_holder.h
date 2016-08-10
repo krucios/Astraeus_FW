@@ -12,7 +12,7 @@
 #include <Modules/MAVLink/system.h>
 #include <Modules/UART/uart.h>
 
-#define ONBOARD_PARAM_COUNT 11
+#define ONBOARD_PARAM_COUNT 12
 #define ONBOARD_PARAM_NAME_LENGTH 7
 #define PARAM_AX        0
 #define PARAM_AY        1
@@ -24,7 +24,8 @@
 #define PARAM_MY        7
 #define PARAM_MZ        8
 #define PARAM_T         9
-#define PARAM_CONTROL   10
+#define PARAM_AT        10
+#define PARAM_AP        11
 
 typedef struct {
     float   param       [ONBOARD_PARAM_COUNT];

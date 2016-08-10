@@ -8,6 +8,7 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+#define BMP180_ENABLED
 #define MPU6050_ENABLED
 #define MPU6050_SELFTEST
 // #define HMC_ENABLED

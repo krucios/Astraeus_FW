@@ -30,6 +30,11 @@ i2c_status_t i2c_readBytes(uint8_t  serial_addr,
                            uint8_t* rx_buffer,
                            uint8_t  read_length);
 
+i2c_status_t i2c_read(uint8_t  serial_addr,
+                      uint8_t  reg_addr,
+                      uint8_t* data,
+                      uint8_t  len);
+
 i2c_status_t i2c_writeBytes(uint8_t  serial_addr,
                             uint8_t* tx_buffer,
                             uint8_t  write_length);
@@ -44,5 +49,10 @@ i2c_status_t i2c_writeBit(uint8_t dev_addr,
                           uint8_t reg_addr,
                           uint8_t bit_num,
                           uint8_t data);
+
+i2c_status_t i2c_write(uint8_t  serial_addr,
+                       uint8_t  reg_addr,
+                       uint8_t* data,
+                       uint8_t  len);
 
 #endif /* I2C_H_ */

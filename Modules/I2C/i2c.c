@@ -36,6 +36,18 @@ i2c_status_t i2c_readBytes(
     return status;
 }
 
+i2c_status_t i2c_read(uint8_t  serial_addr,
+                      uint8_t  reg_addr,
+                      uint8_t* data,
+                      uint8_t  len) {
+    i2c_status_t status;
+    status = i2c_writeBytes(serial_addr, &reg_addr, 1);
+    if (status == I2C_SUCCESS) {
+        status = i2c_readBytes(serial_addr, data, len);
+    }
+    return status;
+}
+
 i2c_status_t i2c_writeBytes(
         uint8_t serial_addr,
         uint8_t* tx_buffer,
@@ -103,6 +115,18 @@ i2c_status_t i2c_writeBit(
 
         status |= i2c_writeBytes(dev_addr, tx_buf, tx_len);
         return status;
+    }
+    return status;
+}
+
+i2c_status_t i2c_write(uint8_t  serial_addr,
+                       uint8_t  reg_addr,
+                       uint8_t* data,
+                       uint8_t  len) {
+    i2c_status_t status;
+    status = i2c_writeBytes(serial_addr, &reg_addr, 1);
+    if (status == I2C_SUCCESS) {
+        status = i2c_writeBytes(serial_addr, data, len);
     }
     return status;
 }

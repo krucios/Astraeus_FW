@@ -107,9 +107,9 @@ void Timer1_IRQHandler() {
             params.param[PARAM_MZ],
             0,
             0,
-            0,
+            params.param[PARAM_AT],
             params.param[PARAM_T],
-            (1 << 12) | ((1 << 9) - 1));
+            ((1 << 12) - 1));
     mavlink_send_msg(&msg);
 
     mavlink_msg_attitude_quaternion_pack(
