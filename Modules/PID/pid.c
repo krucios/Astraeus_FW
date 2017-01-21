@@ -22,10 +22,7 @@ static int16_t Itmp_r, Itmp_p, Itmp_y;
 
 static float    roll, pitch, yaw;
 static int16_t  roll_deg, pitch_deg, yaw_deg;
-/*
-inline void pid_update(float q0, float q1, float q2, float q3, float gx,
-        float gy, float gz, uint16_t force, int16_t* pow) {
-*/
+
 inline void pid_update(int16_t* pow) {
     uint8_t i;
     int16_t sum_r, sum_p, sum_y;
@@ -56,26 +53,6 @@ inline void pid_update(int16_t* pow) {
     Dtmp_r  = (int16_t) ((int32_t)Kd_u * _gx     / Kd_d);
     Dtmp_p  = (int16_t) ((int32_t)Kd_u * _gy     / Kd_d);
     Dtmp_y  = (int16_t) ((int32_t)Kd_u * _gz     / Kd_d);
-
-    /*
-    if (q0 > 0) { // если угол поворота >0.5 градуса, нужно стабилизировать по углам.
-        // (q1, q2, q3) - вектор в локальной системе коордиант вокруг которого необходимо повернуть коптер
-        float P_gain = (float) Kp_u / 16.0; //коэф усиления
-        float angle = acos(q0) * P_gain; //угол поворота
-        float invNorma = invSqrt(q1 * q1 + q2 * q2 + q3 * q3); // нормируем его функция должна неявно подтянуться из либы мажвика
-        q1 *= invNorma;
-        q2 *= invNorma;
-        q3 *= invNorma;
-        Ptmp_p = (int16_t) (q2 * angle);
-        Ptmp_r = (int16_t) (q1 * angle);
-        Ptmp_y = (int16_t) (q3 * angle);
-
-    } else {
-        Ptmp_p = 0;
-        Ptmp_r = 0;
-        Ptmp_y = 0;
-    }
-    */
 
     sum_r = Ptmp_r + Itmp_r + Dtmp_r;
     sum_p = Ptmp_p - Itmp_p + Dtmp_p;

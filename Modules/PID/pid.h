@@ -23,10 +23,6 @@
 extern volatile int16_t Kp_u, Kd_u, Ki_u;
 extern volatile uint16_t force;
 
-/*
-void pid_update(float q0, float q1, float q2, float q3, float gx,
-        float gy, float gz, uint16_t force, int16_t* pow);
-*/
 void pid_update(int16_t* pow);
 
 #endif /* MODULES_PID_PID_H_ */
